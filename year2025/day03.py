@@ -23,6 +23,21 @@ def max_jolt_for_line(digits: list[int]) -> int:
     return best
 
 
+def max_large_jolt_for_line(bank: str) -> int:
+    MAX_BATTERIES = 12
+    batteries = [-1]
+
+    for b in range(1, MAX_BATTERIES + 1):
+        batteries.append(batteries[b - 1] + 1)
+
+        for i in range(batteries[b], len(bank) - MAX_BATTERIES + b):
+            if bank[i] > bank[batteries[b]]:
+                batteries[b] = i
+
+    jolt = [bank[i] for i in batteries[1:]]
+    return int("".join(jolt))
+
+
 def part1(lines: list[str]) -> int:
     total = 0
     for line in lines:
@@ -33,4 +48,8 @@ def part1(lines: list[str]) -> int:
 
 
 def part2(lines: list[str]) -> int:
-    return 0
+    total = 0
+    for bank in lines:
+        total += max_large_jolt_for_line(bank)
+
+    return total
